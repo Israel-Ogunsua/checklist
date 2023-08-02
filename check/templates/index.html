@@ -8,7 +8,7 @@
 <br>
 
 <div class="container">
-  <h2>Todo - List </h2>
+  <h2>Voice activation </h2>
   <p>Click on the button to toggle between showing and hiding content.</p>
   <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">Learn How  to use </button>
   <div id="demo" class="collapse">
@@ -20,40 +20,55 @@
 </div>
 <br>
 <br>
+ 
+<div class="chat-content" style="border-radius: 30px;">
+  <div class="chat-header">
+    <h2>New Chat Messages</h2>
+  </div>
 
-<div class="table">
-    <div class="edit_table">
-        <table style=" border-radius: 37; ">
-          <form  method="post">
-            <tr>
-              <th class = 'tm'><i class="fa fa-info-circle" aria-hidden="true"></i> Title </th>
-              <td><input type="text" id="fname" name="fname" required class="input_table" placeholder = 'Todo name'><br> </td>
-            </tr>
-            <tr>
-              <th class = 'tm'> <i class="fa fa-exclamation" aria-hidden="true"></i> Discription </th> 
-              <td> <textarea name="disc" id= 'disc' rows="2" cols="30" required >To-do list Discription.</textarea><br><br> </td>
-            </tr>
-            <tr>
-              <th class = 'tm'><i class="fa fa-clock-o" aria-hidden="true"></i> Due Time</th>
-              <td><input type="date" id="duetime" name="duetime" required class="input_table"><br><br></td>
-            </tr>
-            <tr>
-              <th class = 'tm'> <i class="fa fa-sort" required aria-hidden="true"></i> Status </th> 
-              <td>
-                <select id="status" name="status">
-                  <option value="important">Important</option>
-                  <option value="less important">Less Important</option>
-                </select><br><br>
-              </td>
-            </tr>
-            <tr>
-              <th>Authotize</th>
-              <td><input class="button" type="submit" value="Submit"> </td>
-            </tr>   
-          </form>
-        </table>
+  
+
+  <div class="chat-container">
+    <div class="card flex-grow-1">
+      <div class="card-body messages-box">
+        
+        <ul class="list-unstyled messages-list">
+  
+        
+          <li class="message received">
+            <div class="message-text">
+              <div class="message-sender">
+                <b>AI Response</b>
+              </div>
+              <div class="message-content">
+                <b>Hey there! How can i help you today?</b>
+              </div>
+            </div>
+          </li>
+
+        </ul>
+        
+      </div>
+     
     </div>
+
+    <br>
+    <form class="message-form">
+      <div class="input-group">
+        <input type="text" class="form-control message-input" placeholder="Type your message...">
+        <div class="input-group-append">
+          <button type="submit" class="btn btn-primary btn-send">Send</button>
+        </div>
+      </div>
+    </form>
+
+  
+ 
+
 </div>
+</div>
+
+
 
 
 {% if current_user.is_authenticated %}
@@ -96,7 +111,7 @@
             </tr>
           {% endfor%}
         {%else%}
-          <center><h6> Nothing on your Todo List!! </h6></center>
+          <center><h6> Nothing on your search List!! </h6></center>
         {%endif%}
     {% endfor%}
   </table>
@@ -104,7 +119,167 @@
 
   <br>
  
-      
+  
+  <style>
+    .messages-box {
+     flex: 1;
+     overflow-y: auto;
+   }
+
+   .messages-list {
+     padding-left: 0;
+   }
+
+   .message {
+     margin-bottom: 15px;
+     list-style: none;
+   }
+
+   .message-text {
+     padding: 10px;
+     border-radius: 5px;
+   }
+
+   .sent {
+     background-color: #dcf8c6;
+     align-self: flex-end;
+   }
+
+   .received {
+     background-color: #f1f0f0;
+     align-self: flex-start;
+   }
+
+   .message-form {
+     border-radius: 20px;
+     padding: 10px;
+     background-color: #f8f9fa;
+   }
+
+   .message-input {
+     flex: 1;
+     border-radius: 0;
+     border-right: none;
+   }
+
+   .btn-send {
+     border-radius: 0;
+   }
+
+   .chat-container {
+     height: 100%;
+     display: flex;
+     flex-direction: column;
+   }
+   body {
+     font-family: Arial, sans-serif;
+     margin: 0;
+     padding: 0;
+     background-color: #fcf6f6;
+  
+   }
+
+   .chat-interface {
+     display: flex;
+   }
+
+   .sidebar {
+     width: 300px;
+     padding: 20px;
+     background-color: rgb(61, 60, 60);
+   }
+
+   .voice-box {
+     display: flex;
+     align-items: center;
+     margin-bottom: 20px;
+   }
+
+   .voice-circle {
+     width: 60px;
+     height: 60px;
+     background-color: rgb(208, 208, 213);
+     border-radius: 50%;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+   }
+
+   .mic-logo {
+     width: 30px;
+     height: 30px;
+     background-color: #777;
+     border-radius: 50%;
+   }
+
+   .voice-text {
+     font-size: 18px;
+     margin-left: 10px;
+     color: #fff;
+   }
+
+   .youtube-video {
+     margin-top: 20px;
+   }
+
+   .chat-content {
+     flex-grow: 1;
+     padding: 20px;
+     background-color: #333;
+     overflow-y: auto; /* Add this line to make it scrollable */
+   }
+
+   .chat-header {
+     padding-bottom: 10px;
+     border-bottom: 1px solid #555;
+   }
+
+   .chat-header h2 {
+     font-size: 24px;
+     color: #fff;
+     margin: 0;
+   }
+
+   .chat-messages {
+     margin-top: 20px;
+   }
+
+   .chat-input {
+     margin-top: 20px;
+     display: flex;
+   }
+
+   .chat-input input[type="text"] {
+     flex-grow: 1;
+     padding: 10px;
+     font-size: 16px;
+     border: none;
+     border-radius: 5px;
+     background-color: #555;
+     color: #fff;
+   }
+
+   .chat-input button {
+     padding: 10px 20px;
+     font-size: 16px;
+     border: none;
+     border-radius: 5px;
+     background-color: #2a4792;
+     color: #fff;
+     margin-left: 10px;
+     cursor: pointer;
+   }
+   .message-input {
+   border-radius: 20px;
+ }
+
+ /* Add border radius to the btn-send class (submit button) */
+ .btn-send {
+   border-radius: 20px;
+ }
+
+ </style>
+
 
     <style> 
         table {
@@ -245,7 +420,64 @@
             }
     </style>
            
-            
+           <script>
+            const messagesList = document.querySelector('.messages-list');
+              const messageForm = document.querySelector('.message-form');
+              const messageInput = document.querySelector('.message-input');
+        
+              messageForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+        
+                const message = messageInput.value.trim();
+                if (message.length === 0) {
+                  return;
+                }
+        
+                const messageItem = document.createElement('li');
+                messageItem.classList.add('message', 'sent');
+                messageItem.innerHTML = `
+                    <div class="message-text">
+                        <div class="message-sender">
+                            <b>You</b>
+                        </div>
+                        <div class="message-content">
+                            ${message}
+                        </div>
+                    </div>`;
+                messagesList.appendChild(messageItem);
+        
+                messageInput.value = '';
+        
+                fetch('', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                  body: new URLSearchParams({
+                    'csrfmiddlewaretoken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    'message': message
+                  })
+                })
+                  .then(response => response.json())
+                  .then(data => {
+                    const response = data.response;
+                    const messageItem = document.createElement('li');
+                    messageItem.classList.add('message', 'received');
+                    messageItem.innerHTML = `
+                    <div class="message-text">
+                        <div class="message-sender">
+                          <b>AI Chatbot</b>
+                        </div>
+                        <div class="message-content">
+                            ${response}
+                        </div>
+                    </div>
+                      `;
+                    messagesList.appendChild(messageItem);
+                  });
+              });
+        
+        
+        
+          </script>
 
             
 

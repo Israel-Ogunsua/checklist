@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title%}
+    Ai speech
+{% endblock %}
+
+{% block content%}
+    <h3> AI Voice Assistant</h3>
+    <br>
+    {% if action %}
+        <div class="disi">
+            <h5 style="font-weight: bold;">You </h5>
+            <p >{{ action }}</p>
+        </div>
+
+        {% if information %}
+            <div class="response">
+                <h5 style=" font-weight: bold;">Everything Ai </h5>
+                <p>{{information}}</p>
+            </div>
+        
+        {% endif %}
+        
+    {% endif %}
+
+    
+
+
+    <style>
+
+     .disi{
+        background: #e0f6d5;
+        padding: 10px 20px;
+        border: 1px solid #dddddd;
+        border-radius: 15px;
+        margin-bottom: 20px;
+    }
+
+    .response{
+        background: #a3b5f0;
+        padding: 10px 20px;
+        border: 1px solid #dddddd;
+        border-radius: 15px;
+        margin-bottom: 20px;
+    }
+
+    .p{
+        color: black;
+        font-family:Georgia, 'Times New Roman', Times, serif;
+    }
+    </style>
+        
+{% endblock %}

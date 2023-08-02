@@ -1,34 +1,122 @@
 from flask.helpers import flash
-from check import app
-from flask import render_template,url_for,request,flash, redirect
-from check import bcrypt
+from check.app import app, bcrypt
+from flask import render_template,url_for,request,flash, redirect,  jsonify
+import openai
 from check.models import User,Post, Archive
 from flask_login import login_user, login_required,current_user, logout_user
 from check.models import db
+
+# for  voice acitvation 
+import speech_recognition as sr
+import pywhatkit
+import datetime
+import wikipedia
+import pyttsx3
+
+running = True
+
+openai_api_key = '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'
+openai.api_key = openai_api_key
+
+def ask_openai(message):
+    # Use the input 'message' parameter as the user's input
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": message},  # Use the 'message' parameter here
+        ]
+    )
+    
+    print( response)
+    # Retrieve and return the assistant's response
+    answer = response.choices[0].message['content'].strip()
+    return answer
+
+
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/home', methods=['GET', 'POST'])
 def index():
-    data = []
-    if current_user.is_authenticated:
-        user = current_user.get_id()
+    if request.method == 'POST':
+        message = request.POST.get('message')
+        print(message)
+        response = ask_openai(message) 
+        return  jsonify({'message': message, 'response': response})
+    return render_template('index.html')
 
-        users  = User.query.filter_by(id= user)
-        for make in users:
-            data.append(make.posts)
-            
-        if request.method == 'POST':
-            title  = request.form['fname']
-            discription = request.form['disc']
-            duetime = request.form['duetime']
-            status = request.form['status']
 
-            post = Post(title = title, discription = discription,Duetime= duetime, status = status, user_id = user)
-            db.session.add(post)
-            db.session.commit()
-    else:
-        if request.method == 'POST':
-           return redirect('login')
-    return render_template('index.html', context= data)
+recognizer = sr.Recognizer()
+engine = pyttsx3.init()
+voices = engine.getProperty("voices")
+engine.setProperty("voice", voices[1].id)
+
+# talk def
+def talk(text):
+    engine.say(text)
+
+# audio processing
+def process_audio():
+
+    with sr.Microphone() as source:
+        print("Listening...")
+        recognizer.adjust_for_ambient_noise(source, duration = 0.2)
+        audio = recognizer.listen(source)
+
+    try:
+        # Perform speech recognition
+        action = recognizer.recognize_google(audio)
+        print("You said:", action)
+        return action
+    except sr.UnknownValueError:
+        print("Sorry, I couldn't understand what you said. Please try again.")
+        return None
+    except sr.RequestError as e:
+        print("Error occurred during recognition. Check your internet connection or API key:", e)
+        return None
+
+@app.route('/voice')
+def speech():
+    talk("I am your voice assistant, What can I do for you today?")
+        
+    while running :
+        action = process_audio()
+        information = "I don't have a response"
+    
+        if action:
+            if "play" in action.lower():
+                song = action.replace("play", "")
+                print("Playing.....")
+                information= "Playing " + song
+                pywhatkit.playonyt(song)
+
+            elif "play me" in action.lower():
+                song = action.replace("play me", "")
+                print("Playing.....")
+                information = "Playing " + song
+                pywhatkit.playonyt(song)
+
+            elif "time" in action.lower():
+                current_time = datetime.datetime.now().strftime("%I:%M %p")
+                print(current_time)
+                information  = "The current time is " + current_time
+
+            elif 'how' in action.lower():
+                description = action.replace("how", "")
+                information = wikipedia.summary(description, 2)
+                print(information)
+                talk(information)
+
+            elif 'what' in action.lower():
+                description = action.replace("how", "")
+                information = wikipedia.summary(description, 2)
+                print(information)
+                talk(information)
+
+            else:
+                information = 'Can you say that again?'
+
+        return render_template('speech.html', action=action, information=information)  # Pass 'action' variable to the template
+
 
 @app.route('/about')
 def about():

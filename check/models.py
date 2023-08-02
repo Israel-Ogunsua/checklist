@@ -1,11 +1,11 @@
 from datetime import time
 from enum import unique
-from check import app, login_manager
+from check.app import app, login_manager, db
 from flask_login import UserMixin
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy(app)
+
 
 @login_manager.user_loader
 def load_user(user_id):
